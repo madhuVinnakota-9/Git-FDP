@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<head>
+    <title>
+        MongoDB-Express
+    </title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+</head>
+<body>
+    <h1>MongoDB-Express</h1>
+  
+    <button onclick="readUser()">READ</button><br>
+    Id: <input type="text" id="uid"/><br>
+    Name: <input type="text" id="uname"/><br>
+    Phone number: <input type="text" id="uphone"/><br>
+    Email: <input type="text" id="uemail"/>
+    
+    <button onclick="addUser()">ADD</button><br>
+    <button>UPDATE</button>
+    <button>DELETE</button>
+    
+    
+
+    <table class="table">
+        <thead>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>PHONE</th>
+            <th>EMAIL</th>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+    <script>
+        async function readUser(){
+            console.log("this is read user.....");
+            let readData=await fetch('http://localhost:3000/readUser');
+            let result=await readData.json();
+            let tbody=document.getElementById(`tableBody`);
+            result.forEach(element => {
+                tbody.innerHTML+=`
+                <tr>
+                    <td>${element._id}</td>
+                    <td>${element.name}</td>
+                    <td>${element.phone}</td>
+                    <td>${element.email}</td>
+                </tr>
+                    `
+            });
+            // data = await result.json()
+            // data.forEach(user=>{
+            //     console.log("name"+" "+user.name)
+            //     console.log("Phone"+ " "+user.phone)
+            // })
+        }
+
+        let addUser=()=>{
+            let uid=document.getElementById('uid').value;
+            let uname=document.getElementById('uname').value;
+            let uphone=document.getElementById('uphone').value;
+
+            let uemail=document.getElementById('uemail').value;
+
+            console.log("add user");
+            //second parameter is object
+            fetch('http://localhost:3000/addUser',{
+                method:"POST",
+                //JAVA SCRIPT OBJECT
+                body:JSON.stringify({
+                    _id:uid,
+                    name:uname,
+                    phone:uphone,
+                    email:uemail
+                }),
+                headers:
+                    {'Content-type':'application/json'}
+                
+            })
+        }
+    </script>
+</body>
+</html>
